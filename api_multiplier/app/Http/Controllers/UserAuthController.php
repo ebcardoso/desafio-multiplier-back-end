@@ -4,10 +4,28 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User as User;
+use Illuminate\Support\Facades\Validator;
 
 class UserAuthController extends Controller
 {
     public function registerUserExample(Request $request){
+        $rules =  [
+            'name' => 'required',
+            'email' => 'required',
+            'password' => 'required',
+            'users_type' => 'required',
+        ];
+        $messages = [
+            'name.required' => 'O atributo nome é obrigatório!',
+            'email.required' => 'O atributo email é obrigatório!',
+            'password.required' => 'O atributo password é obrigatório!',
+            'users_type.required' => 'O atributo tipo do usuário é obrigatório!',
+        ];
+        $validator = Validator::make($request->all(), $rules, $messages);
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()], 500);
+        }
+
         $user = new User;
         $user->name = $request->name;
         $user->email = $request->email;
@@ -22,6 +40,19 @@ class UserAuthController extends Controller
     }
 
     public function loginUserExample(Request $request){
+        $rules =  [
+            'email' => 'required',
+            'password' => 'required',
+        ];
+        $messages = [
+            'email.required' => 'O atributo email é obrigatório!',
+            'password.required' => 'O atributo password é obrigatório!',
+        ];
+        $validator = Validator::make($request->all(), $rules, $messages);
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()], 500);
+        }
+
         $login_credentials=[
             'email'=>$request->email,
             'password'=>$request->password,
