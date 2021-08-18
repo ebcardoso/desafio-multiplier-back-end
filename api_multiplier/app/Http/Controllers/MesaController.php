@@ -34,7 +34,6 @@ class MesaController extends Controller
         $mesa = new MesaModel;
         $mesa->id_cliente = $id_cliente;
         $mesa->numero_mesa = $request->numero_mesa;
-        $mesa->total_mesa = 0;
 
         if ($mesa->save()) {
             return response()->json($mesa, 201);
