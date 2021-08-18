@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\CardapioItemModel as CardapioItemModel;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class CardapioItemController extends Controller
 {
@@ -19,6 +20,19 @@ class CardapioItemController extends Controller
 
     public function store(Request $request, $id_cardapio)
     {
+        $rules =  [
+            'nome_item' => 'required',
+            'preco_item' => 'required',
+        ];
+        $messages = [
+            'nome_item.required' => 'O atributo nome_item é obrigatório!',
+            'preco_item.required' => 'O atributo preco_item é obrigatório!',
+        ];
+        $validator = Validator::make($request->all(), $rules, $messages);
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()], 500);
+        }
+
         $item = new CardapioItemModel;
         $item->id_cardapio = $id_cardapio;
         $item->nome_item = $request->nome_item;
@@ -48,6 +62,19 @@ class CardapioItemController extends Controller
 
     public function update(Request $request, $id_cardapio, $id_item)
     {
+        $rules =  [
+            'nome_item' => 'required',
+            'preco_item' => 'required',
+        ];
+        $messages = [
+            'nome_item.required' => 'O atributo nome_item é obrigatório!',
+            'preco_item.required' => 'O atributo preco_item é obrigatório!',
+        ];
+        $validator = Validator::make($request->all(), $rules, $messages);
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()], 500);
+        }
+
         $item = CardapioItemModel::find([['id', $id_item], ['id_cardapio', $id_cardapio]])->first();
 
         if (is_null($item)) {
