@@ -18,7 +18,7 @@ class ClienteSeeder extends Seeder
 
         $faker = Faker::create('pt_BR');
 
-        for ($i = 0; $i < 100; $i++) {
+        for ($i = 0; $i < 10000; $i++) {
             $cliente = new ClienteModel;
             $cliente->nome_cliente = $faker->name;
             $cliente->cpf_cliente  = $faker->cpf;
