@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\ClienteModel as ClienteModel;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class ClienteController extends Controller
 {
@@ -19,6 +20,19 @@ class ClienteController extends Controller
 
     public function store(Request $request)
     {
+        $rules =  [
+            'nome_cliente' => 'required',
+            'cpf_cliente' => 'required',
+        ];
+        $messages = [
+            'nome_cliente.required' => 'O atributo nome_cliente é obrigatório!',
+            'cpf_cliente.required' => 'O atributo cpf_cliente é obrigatório!',
+        ];
+        $validator = Validator::make($request->all(), $rules, $messages);
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()], 500);
+        }
+
         $cli = new ClienteModel;
         $cli->nome_cliente = $request->nome_cliente;
         $cli->cpf_cliente = $request->cpf_cliente;
@@ -44,6 +58,19 @@ class ClienteController extends Controller
 
     public function update(Request $request, $id_cliente)
     {
+        $rules =  [
+            'nome_cliente' => 'required',
+            'cpf_cliente' => 'required',
+        ];
+        $messages = [
+            'nome_cliente.required' => 'O atributo nome_cliente é obrigatório!',
+            'cpf_cliente.required' => 'O atributo cpf_cliente é obrigatório!',
+        ];
+        $validator = Validator::make($request->all(), $rules, $messages);
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()], 500);
+        }
+        
         $cli = ClienteModel::find($id_cliente);
         
         if (is_null($cli)) {

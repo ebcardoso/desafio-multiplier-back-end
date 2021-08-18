@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\CardapioModel as CardapioModel;
 use App\Http\Resources\Cardapio as CardapioResource;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class CardapioController extends Controller
 {
@@ -20,9 +21,16 @@ class CardapioController extends Controller
 
     public function store(Request $request)
     {
-        /*$validated = $request->validate([
-            'nome_cardapio' => 'required|max:255'
-        ]);*/
+        $rules =  [
+            'nome_cardapio' => 'required',
+        ];
+        $messages = [
+            'nome_cardapio.required' => 'O atributo nome_cardapio é obrigatório!',
+        ];
+        $validator = Validator::make($request->all(), $rules, $messages);
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()], 500);
+        }
 
         $card = new CardapioModel;
         $card->nome_cardapio = $request->nome_cardapio;
@@ -48,6 +56,17 @@ class CardapioController extends Controller
 
     public function update(Request $request, $id_cardapio)
     {
+        $rules =  [
+            'nome_cardapio' => 'required',
+        ];
+        $messages = [
+            'nome_cardapio.required' => 'O atributo nome_cardapio é obrigatório!',
+        ];
+        $validator = Validator::make($request->all(), $rules, $messages);
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()], 500);
+        }
+        
         $card = CardapioModel::find($id_cardapio);
         
         if (is_null($card)) {
