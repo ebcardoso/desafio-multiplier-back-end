@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\MesaModel as MesaModel;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class MesaController extends Controller
 {
@@ -18,7 +19,18 @@ class MesaController extends Controller
     }
     
     public function store(Request $request, $id_cliente)
-    {
+    {        
+        $rules =  [
+            'numero_mesa' => 'required',
+        ];
+        $messages = [
+            'numero_mesa.required' => 'O atributo numero_mesa é obrigatório!',
+        ];
+        $validator = Validator::make($request->all(), $rules, $messages);
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()], 500);
+        }
+
         $mesa = new MesaModel;
         $mesa->id_cliente = $id_cliente;
         $mesa->numero_mesa = $request->numero_mesa;
@@ -47,7 +59,18 @@ class MesaController extends Controller
     }
 
     public function update(Request $request, $id_cliente, $id_mesa)
-    {
+    { 
+        $rules =  [
+            'numero_mesa' => 'required',
+        ];
+        $messages = [
+            'numero_mesa.required' => 'O atributo numero_mesa é obrigatório!',
+        ];
+        $validator = Validator::make($request->all(), $rules, $messages);
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()], 500);
+        }
+
         $mesa = MesaModel::find([['id', $id_mesa], ['id_cliente', $id_cliente]])->first();
 
         if (is_null($mesa)) {
